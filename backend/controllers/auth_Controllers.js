@@ -33,7 +33,7 @@ const signup = async (req, res) => {
       gender,
       profilePic: gender === "male" ? boyProfilePic : girlProfilePic
     })
-
+ 
     if(newUser){
         
         generateTokenandSetCookie(newUser.id,res)
@@ -60,16 +60,16 @@ const login = async (req, res) => {
   try {
     const {username,password} = req.body;
     const user =await User.findOne({username});
-    const isPasswordCorrect = await bcrypt.compare(password,user?.password || ""); // isme ? yeh isliye use kiya h kyuki if user exist nhi kre tho vo koi error na de sirf false de
+    const isPasswordCorrect = await bcrypt.compare(password, user?.password || ""); // isme ? yeh isliye use kiya h kyuki if user exist nhi kre tho vo koi error na de sirf false de
     if(!user || !isPasswordCorrect){
        res.status(404).json({error:"either user dont exists or password wrong"});
     }
-    generateTokenandSetCookie(newUser.id,res)
+    generateTokenandSetCookie(user.id,res)
     res.status(201).json({
-        _id: newUser.id,
-        fullName: newUser.fullName, 
-        username: newUser.username,
-        profilePic: newUser.profilePic
+        _id: user.id,
+        fullName: user.fullName, 
+        username: user.username,
+        profilePic: user.profilePic
       });
 
   } catch (error) {

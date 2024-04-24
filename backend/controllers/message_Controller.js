@@ -4,29 +4,29 @@ const Message = require('../models/message_Model');
 
 const sendMessages = async (req,res)=>{
   try {
-    const message =req.body.message.toString();
-    const { id: receiverId } = req.params;
-    const senderId = req.user._id; // getting this id due to protectRoute middleware
+		const { message } = req.body;
+		const { id: receiverId } = req.params;
+		const senderId = req.user._id;
 
-  let conversation =  await Conversation.findOne({
-      participants:{$all:[senderId,receiverId]},
-    })
+		let conversation = await Conversation.findOne({
+			participants: { $all: [senderId, receiverId] },
+		});
 
-  if(!conversation){
-    conversation = await Conversation.create({
-      participants:[senderId,receiverId],
-    })
-  }
+		if (!conversation) {
+			conversation = await Conversation.create({
+				participants: [senderId, receiverId],
+			});
+		}
 
-  let newMessage =new Message({
-    senderId,
-    receiverId,
-    message,
-  })
+		const newMessage = new Message({
+			senderId,
+			receiverId,
+			message,
+		});
 
-  if(newMessage){
-    conversation.messages.push(newMessage._id)
-  }
+		if (newMessage) {
+			conversation.messages.push(newMessage._id);
+		}
 
   // await conversation.save();
   // await newMessage.save();

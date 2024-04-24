@@ -6,8 +6,9 @@ const usersRoutes = require('./routes/users_Routes.js');
 const cookieparser = require('cookie-parser');
 const connectToMongoDb = require('./Db/connectToMongoDb.js');
 
-const app =express();
+const app1 = require('./socket/socket.js')
 
+const app = express()
 dotenv.config();
 app.use(express.json());// parse the files into json from req.body
 app.use(cookieparser());
